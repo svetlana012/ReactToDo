@@ -12,7 +12,7 @@ const App = () => {
     <body>
       <main>
         <div className="page">
-          <main className="todo">
+          
             <h1 className="todo__title">TODO LIST</h1>
 
             <div className="toolbar todo__toolbar">
@@ -25,8 +25,7 @@ const App = () => {
               <NoteItem />
             </ul>
 
-            <ButtonAdd />
-          </main>
+            <ButtonAdd />          
 
           <Modal />
         </div>
