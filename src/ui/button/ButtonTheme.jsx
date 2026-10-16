@@ -1,6 +1,11 @@
 const ButtonTheme = () => {
+
+  const handleClick = () => {
+    console.log('Кнопка нажата!');
+  };
+
   return (
-    <button className="theme-btn toolbar__theme" type="button" aria-label="Toggle theme">
+    <button className="theme-btn toolbar__theme" type="button" aria-label="Toggle theme" onClick={handleClick}>
       <svg
         width="24"
         height="24"
