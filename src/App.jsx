@@ -10,7 +10,7 @@ import Modal from "./ui/components/Modal";
 
 const App = () => {
   return (
-    <body>
+  
       <main>
         <div className="page">
           <h1 className="todo__title">TODO LIST</h1>
@@ -26,7 +26,7 @@ const App = () => {
           <Modal />
         </div>
       </main>
-    </body>
+  
 
   )
 }
