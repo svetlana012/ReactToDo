@@ -1,7 +1,12 @@
 const Search = () => {
+
+  const handleChange = (event) => {
+    console.log(event.target.value);
+  };
+
   return (
     <div className="search toolbar__search">
-      <input className="search__input" type="text" placeholder="Search note..." />
+      <input className="search__input" type="text" placeholder="Search note..." onChange={handleChange}/>
       <svg
         className="search__icon"
         width="24"

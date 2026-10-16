@@ -1,9 +1,14 @@
 const NoteItem = () => {
+
+  const handleChange = (event) => {
+    console.log(event.target.checked);
+  };
+
   return (
     <li className="notes__item" >
       <div className="note">
         <label className="note__label">
-          <input className="note__checkbox" type="checkbox" />
+          <input className="note__checkbox" type="checkbox" onChange={handleChange}/>
           <span className="note__text">NOTE 1</span>
         </label>
         <div className="note__actions">

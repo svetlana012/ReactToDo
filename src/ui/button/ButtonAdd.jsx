@@ -1,6 +1,11 @@
 const ButtonAdd = () => {
+
+  const handleClick = () => {
+    console.log('Кнопка нажата!');
+  };
+
   return (
-    <a className="add-btn todo__add" href="#new-note" aria-label="Add note">
+    <a className="add-btn todo__add" href="#new-note" aria-label="Add note" onClick={handleClick}>
       <svg
         width="28"
         height="28"
