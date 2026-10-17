@@ -1,7 +1,7 @@
-const Search = () => {
+const Search = (props) => {
 
   const handleChange = (event) => {
-    console.log(event.target.value);
+    props.onSearch(event.target.value)
   };
 
   return (

@@ -1,18 +1,31 @@
-const NoteItem = () => {
+const NoteItem = (props) => {
 
   const handleChange = (event) => {
-    console.log(event.target.checked);
+    props.onToggle(props.id)
   };
 
   return (
     <li className="notes__item" >
       <div className="note">
         <label className="note__label">
-          <input className="note__checkbox" type="checkbox" onChange={handleChange}/>
-          <span className="note__text">NOTE 1</span>
+
+          <input
+            className="note__checkbox"
+            type="checkbox"
+            onChange={handleChange}
+            checked={props.isDone} />
+
+          <span className="note__text">{props.title}</span>
+
         </label>
         <div className="note__actions">
-          <button className="icon-btn" type="button" aria-label="Edit">
+
+          <button
+            className="icon-btn"
+            type="button"
+            aria-label="Edit"
+            onClick={() => props.onDelete(props.id)}>
+
             <svg
               width="16"
               height="16"
@@ -27,7 +40,14 @@ const NoteItem = () => {
               <path d="M17 3l4 4L8 20l-5 1 1-5L17 3z" />
             </svg>
           </button>
-          <button className="icon-btn" type="button" aria-label="Delete">
+
+          <button
+            className="icon-btn"
+            type="button"
+            aria-label="Delete"
+            onClick={() => props.onDelete(props.id)}
+          >
+
             <svg
               width="16"
               height="16"

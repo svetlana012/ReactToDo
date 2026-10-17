@@ -5,7 +5,11 @@ const ButtonTheme = () => {
   };
 
   return (
-    <button className="theme-btn toolbar__theme" type="button" aria-label="Toggle theme" onClick={handleClick}>
+    <button
+      className="theme-btn toolbar__theme"
+      type="button"
+      aria-label="Toggle theme"
+      onClick={handleClick}>
       <svg
         width="24"
         height="24"
