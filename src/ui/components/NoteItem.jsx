@@ -24,8 +24,8 @@ const NoteItem = (props) => {
             className="icon-btn"
             type="button"
             aria-label="Edit"
-            onClick={() => props.onDelete(props.id)}>
-
+            onClick={() => props.onEdit(props.id)}
+          >
             <svg
               width="16"
               height="16"
@@ -64,7 +64,7 @@ const NoteItem = (props) => {
           </button>
         </div>
       </div>
-    </li>
+    </li >
   )
 }
 
