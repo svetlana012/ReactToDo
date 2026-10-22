@@ -1,12 +1,16 @@
-const Search = (props) => {
-
+const Search = ({ onSearch }) => {
   const handleChange = (event) => {
-    props.onSearch(event.target.value)
+    onSearch(event.target.value);
   };
 
   return (
     <div className="search toolbar__search">
-      <input className="search__input" type="text" placeholder="Search note..." onChange={handleChange}/>
+      <input
+        className="search__input"
+        type="text"
+        placeholder="Search note..."
+        onChange={handleChange}
+      />
       <svg
         className="search__icon"
         width="24"
@@ -22,7 +26,7 @@ const Search = (props) => {
         <path d="M21 21l-4.35-4.35" />
       </svg>
     </div>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;

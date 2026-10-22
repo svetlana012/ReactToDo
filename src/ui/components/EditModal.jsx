@@ -1,21 +1,26 @@
 import { useState } from "react";
 
-const EditModal = (props) => {
-  const [value, setValue] = useState(props.title);
+const EditModal = ({ onEdit, onClose, id, title }) => {
+  const [value, setValue] = useState(title);
+  const [error, setError] = useState("");
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    if (event.target.value.trim()) {
+      setError("");
+    }
   };
 
   const handleApply = () => {
     const newTitle = value.trim();
 
     if (!newTitle) {
+      setError("Note title cannot be empty");
       return;
     }
 
-    props.onEdit(props.id, newTitle);
-    props.onClose();
+    onEdit(id, newTitle);
+    onClose();
   };
 
   return (
@@ -24,19 +29,17 @@ const EditModal = (props) => {
         <h2 className="modal__title">EDIT NOTE</h2>
 
         <input
-          className="modal__input"
+          className={`modal__input ${error ? "modal__input--error" : ""}`}
           type="text"
           placeholder="Edit your note..."
           value={value}
           onChange={handleChange}
         />
 
+        {error && <p className="modal__error">{error}</p>}
+
         <div className="modal__actions">
-          <button
-            className="btn btn--outline"
-            type="button"
-            onClick={props.onClose}
-          >
+          <button className="btn btn--outline" type="button" onClick={onClose}>
             CANCEL
           </button>
 

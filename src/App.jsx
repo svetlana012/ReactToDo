@@ -33,7 +33,6 @@ const App = () => {
     });
   };
 
-
   const addNote = (title) => {
     setNotes((prev) => [
       ...prev,
@@ -76,49 +75,47 @@ const App = () => {
     setIsModalOpen(false);
   };
 
-  const filterToDos = notes
-    .filter((note) =>
-      note.title.toLowerCase().includes(search.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (filter === "ALL") {
-        return 0;
-      }
+  const filterToDos = notes.sort((a, b) => {
+    if (filter === "ALL") {
+      return 0;
+    }
 
-      if (filter === "INCOMPLETE") {
-        if (a.isDone && !b.isDone) {
-          return 1;
-        }
-        if (!a.isDone && b.isDone) {
-          return -1;
-        }
-        return 0;
+    if (filter === "INCOMPLETE") {
+      if (a.isDone && !b.isDone) {
+        return 1;
       }
-
-      if (filter === "COMPLETE") {
-        if (a.isDone && !b.isDone) {
-          return -1;
-        }
-        if (!a.isDone && b.isDone) {
-          return 1;
-        }
-        return 0;
+      if (!a.isDone && b.isDone) {
+        return -1;
       }
       return 0;
-    });
+    }
+
+    if (filter === "COMPLETE") {
+      if (a.isDone && !b.isDone) {
+        return -1;
+      }
+      if (!a.isDone && b.isDone) {
+        return 1;
+      }
+      return 0;
+    }
+    return 0;
+  });
 
   const renderToDos = () => {
-    return filterToDos.map((note) => (
-      <NoteItem
-        key={note.id}
-        id={note.id}
-        title={note.title}
-        isDone={note.isDone}
-        onToggle={toggleNote}
-        onDelete={deleteNote}
-        onEdit={openEditModal}
-      />
-    ));
+    return filterToDos
+      .filter((note) => note.title.toLowerCase().includes(search.toLowerCase()))
+      .map((note) => (
+        <NoteItem
+          key={note.id}
+          id={note.id}
+          title={note.title}
+          isDone={note.isDone}
+          onToggle={toggleNote}
+          onDelete={deleteNote}
+          onEdit={openEditModal}
+        />
+      ));
   };
 
   const openEditModal = (id) => {
@@ -131,9 +128,7 @@ const App = () => {
     setEditingNoteId(null);
   };
 
-  const editingNote = notes.find(
-    (note) => note.id === editingNoteId
-  );
+  const editingNote = notes.find((note) => note.id === editingNoteId);
 
   return (
     <main>
@@ -144,8 +139,7 @@ const App = () => {
           <ButtonFilter onFilterChange={setFilter} />
           <ButtonTheme />
         </div>
-        <ul className="notes todo__notes">{renderToDos()}
-        </ul>
+        <ul className="notes todo__notes">{renderToDos()}</ul>
         <ButtonAdd onAddNote={openModal} />
         {isModalOpen && <Modal onAdd={addNote} onClose={closeModal} />}
         <Empty />

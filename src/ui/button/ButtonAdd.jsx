@@ -1,14 +1,10 @@
-const ButtonAdd = (props) => {
-
-  const onAddNote = () => {    
-    props.onAddNote()
-  };
-
+const ButtonAdd = ({ onAddNote }) => {
   return (
     <button
       className="add-btn todo__add"
       aria-label="Add note"
-      onClick={onAddNote}>
+      onClick={onAddNote}
+    >
       <svg
         width="28"
         height="28"
@@ -22,7 +18,7 @@ const ButtonAdd = (props) => {
         <path d="M12 4v16M4 12h16" />
       </svg>
     </button>
-  )
-}
+  );
+};
 
-export default ButtonAdd
+export default ButtonAdd;

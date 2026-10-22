@@ -1,30 +1,27 @@
-const NoteItem = (props) => {
-
+const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
   const handleChange = (event) => {
-    props.onToggle(props.id)
+    onToggle(id);
   };
 
   return (
-    <li className="notes__item" >
+    <li className="notes__item">
       <div className="note">
         <label className="note__label">
-
           <input
             className="note__checkbox"
             type="checkbox"
             onChange={handleChange}
-            checked={props.isDone} />
+            checked={isDone}
+          />
 
-          <span className="note__text">{props.title}</span>
-
+          <span className="note__text">{title}</span>
         </label>
         <div className="note__actions">
-
           <button
             className="icon-btn"
             type="button"
             aria-label="Edit"
-            onClick={() => props.onEdit(props.id)}
+            onClick={() => onEdit(id)}
           >
             <svg
               width="16"
@@ -45,9 +42,8 @@ const NoteItem = (props) => {
             className="icon-btn"
             type="button"
             aria-label="Delete"
-            onClick={() => props.onDelete(props.id)}
+            onClick={() => onDelete(id)}
           >
-
             <svg
               width="16"
               height="16"
@@ -64,8 +60,8 @@ const NoteItem = (props) => {
           </button>
         </div>
       </div>
-    </li >
-  )
-}
+    </li>
+  );
+};
 
-export default NoteItem
+export default NoteItem;
