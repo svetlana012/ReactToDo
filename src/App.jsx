@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import "./styles/style.css";
 import "./styles/global.css";
@@ -19,13 +19,24 @@ const App = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState(null);
 
-  const [notes, setNotes] = useState([
-    {
-      title: "Выучить react",
-      id: Date.now(),
-      isDone: false,
-    },
-  ]);
+  const [notes, setNotes] = useState(() => {
+    const savedNotes = localStorage.getItem("notes");
+
+    if (savedNotes) {
+      return JSON.parse(savedNotes);
+    }
+    return [
+      {
+        title: "Выучить react",
+        id: Date.now(),
+        isDone: false,
+      },
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   const deleteNote = (taskId) => {
     setNotes((prev) => {
