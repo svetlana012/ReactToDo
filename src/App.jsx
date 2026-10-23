@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import "./styles/style.css";
 import "./styles/global.css";
@@ -12,6 +12,40 @@ import Modal from "./ui/components/Modal";
 import Empty from "./ui/components/Empty";
 import EditModal from "./ui/components/EditModal";
 
+const getDataFromLocalStorage = () => {
+  try {
+    const savedNotes = localStorage.getItem("notes");
+
+    if (savedNotes === null) {
+      return [
+        {
+          title: "Выучить react",
+          id: Date.now(),
+          isDone: false,
+        },
+      ];
+    }
+
+    const parsedNotes = JSON.parse(savedNotes);
+
+    if (!Array.isArray(parsedNotes)) {
+      throw new Error("Сохранённые задачи должны быть массивом");
+    }
+
+    return parsedNotes;
+  } catch (error) {
+    console.error("Ошибка загрузки задач:", error);
+
+    return [
+      {
+        title: "Выучить react",
+        id: Date.now(),
+        isDone: false,
+      },
+    ];
+  }
+};
+
 const App = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
@@ -19,13 +53,15 @@ const App = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState(null);
 
-  const [notes, setNotes] = useState([
-    {
-      title: "Выучить react",
-      id: Date.now(),
-      isDone: false,
-    },
-  ]);
+  const [notes, setNotes] = useState(getDataFromLocalStorage);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("notes", JSON.stringify(notes));
+    } catch (error) {
+      console.error("Ошибка сохранения задач:", error);
+    }
+  }, [notes]);
 
   const deleteNote = (taskId) => {
     setNotes((prev) => {
