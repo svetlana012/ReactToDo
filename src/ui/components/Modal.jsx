@@ -1,25 +1,62 @@
-const Modal = () => {
+import { useState } from "react";
+
+const Modal = ({ onAdd, onClose }) => {
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
 
   const handleChange = (event) => {
-    console.log(event.target.value);
+    setValue(event.target.value);
+
+    if (event.target.value.trim()) {
+      setError("");
+    }
   };
 
-  const handleClick = () => {
-    console.log('Кнопка нажата!');
+  const handleApply = () => {
+    const newTitle = value.trim();
+
+    if (!newTitle) {
+      setError("Note title cannot be empty");
+      return;
+    }
+
+    onAdd(newTitle);
+    setValue("");
+    setError("");
+    onClose();
   };
 
   return (
     <div className="modal" id="new-note">
       <div className="modal__dialog">
         <h2 className="modal__title">NEW NOTE</h2>
-        <input className="modal__input" type="text" placeholder="Input your note..." onChange={handleChange} />
+
+        <input
+          className={`modal__input ${error ? "modal__input--error" : ""}`}
+          type="text"
+          placeholder="Input your note..."
+          onChange={handleChange}
+          value={value}
+        />
+
+        {error && <p className="modal__error">{error}</p>}
+
         <div className="modal__actions">
-          <button className="btn btn--outline" onClick={handleClick}>CANCEL</button>
-          <button className="btn btn--primary" onClick={handleClick}>APPLY</button>
+          <button className="btn btn--outline" type="button" onClick={onClose}>
+            CANCEL
+          </button>
+
+          <button
+            className="btn btn--primary"
+            type="button"
+            onClick={handleApply}
+          >
+            APPLY
+          </button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;

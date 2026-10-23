@@ -295,7 +295,6 @@
 
 /* modal */
 .modal {
-  display: none;
   position: fixed;
   inset: 0;
   z-index: 10;
@@ -350,4 +349,31 @@
   display: flex;
   justify-content: space-between;
   margin-top: auto;
+}
+
+.modal__input--error {
+  border: 1px solid red;
+}
+
+.modal__error {
+  color: red;
+  font-size: 14px;
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+
+button,
+select,
+input[type="checkbox"],
+input[type="radio"],
+label,
+a,
+[role="button"] {
+  cursor: pointer;
+}
+
+input[type="text"],
+input[type="search"],
+textarea {
+  cursor: text;
 }

@@ -1,18 +1,28 @@
-const NoteItem = () => {
-
+const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
   const handleChange = (event) => {
-    console.log(event.target.checked);
+    onToggle(id);
   };
 
   return (
-    <li className="notes__item" >
+    <li className="notes__item">
       <div className="note">
         <label className="note__label">
-          <input className="note__checkbox" type="checkbox" onChange={handleChange}/>
-          <span className="note__text">NOTE 1</span>
+          <input
+            className="note__checkbox"
+            type="checkbox"
+            onChange={handleChange}
+            checked={isDone}
+          />
+
+          <span className="note__text">{title}</span>
         </label>
         <div className="note__actions">
-          <button className="icon-btn" type="button" aria-label="Edit">
+          <button
+            className="icon-btn"
+            type="button"
+            aria-label="Edit"
+            onClick={() => onEdit(id)}
+          >
             <svg
               width="16"
               height="16"
@@ -27,7 +37,13 @@ const NoteItem = () => {
               <path d="M17 3l4 4L8 20l-5 1 1-5L17 3z" />
             </svg>
           </button>
-          <button className="icon-btn" type="button" aria-label="Delete">
+
+          <button
+            className="icon-btn"
+            type="button"
+            aria-label="Delete"
+            onClick={() => onDelete(id)}
+          >
             <svg
               width="16"
               height="16"
@@ -45,7 +61,7 @@ const NoteItem = () => {
         </div>
       </div>
     </li>
-  )
-}
+  );
+};
 
-export default NoteItem
+export default NoteItem;

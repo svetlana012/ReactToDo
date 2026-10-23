@@ -1,11 +1,10 @@
-const ButtonAdd = () => {
-
-  const handleClick = () => {
-    console.log('Кнопка нажата!');
-  };
-
+const ButtonAdd = ({ onAddNote }) => {
   return (
-    <a className="add-btn todo__add" href="#new-note" aria-label="Add note" onClick={handleClick}>
+    <button
+      className="add-btn todo__add"
+      aria-label="Add note"
+      onClick={onAddNote}
+    >
       <svg
         width="28"
         height="28"
@@ -18,8 +17,8 @@ const ButtonAdd = () => {
       >
         <path d="M12 4v16M4 12h16" />
       </svg>
-    </a>
-  )
-}
+    </button>
+  );
+};
 
-export default ButtonAdd
+export default ButtonAdd;
