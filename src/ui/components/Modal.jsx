@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const Modal = ({ onAdd, onClose }) => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -37,6 +45,7 @@ const Modal = ({ onAdd, onClose }) => {
           placeholder="Input your note..."
           onChange={handleChange}
           value={value}
+          ref={inputRef}
         />
 
         {error && <p className="modal__error">{error}</p>}
