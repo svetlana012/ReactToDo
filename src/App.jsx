@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 import "./styles/style.css";
 import "./styles/global.css";
@@ -63,11 +63,11 @@ const App = () => {
     }
   }, [notes]);
 
-  const deleteNote = (taskId) => {
+  const deleteNote = useCallback((taskId) => {
     setNotes((prev) => {
       return prev.filter((note) => note.id !== taskId);
     });
-  };
+  }, []);
 
   const addNote = (title) => {
     setNotes((prev) => [
@@ -80,18 +80,18 @@ const App = () => {
     ]);
   };
 
-  const toggleNote = (id) => {
+  const toggleNote = useCallback((taskId) => {
     setNotes((prev) =>
       prev.map((note) => {
-        if (note.id === id) {
+        if (note.id === taskId) {
           return { ...note, isDone: !note.isDone };
         }
         return note;
       }),
     );
-  };
+  }, []);
 
-  const updateNote = (id, newTitle) => {
+  const updateNote = useCallback((id, newTitle) => {
     setNotes((prev) =>
       prev.map((note) => {
         if (note.id === id) {
@@ -101,7 +101,7 @@ const App = () => {
         return note;
       }),
     );
-  };
+  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -111,32 +111,34 @@ const App = () => {
     setIsModalOpen(false);
   };
 
-  const filterToDos = notes.sort((a, b) => {
-    if (filter === "ALL") {
-      return 0;
-    }
+  const filterToDos = useMemo(() => {
+    return [...notes].sort((a, b) => {
+      if (filter === "ALL") {
+        return 0;
+      }
 
-    if (filter === "INCOMPLETE") {
-      if (a.isDone && !b.isDone) {
-        return 1;
+      if (filter === "INCOMPLETE") {
+        if (a.isDone && !b.isDone) {
+          return 1;
+        }
+        if (!a.isDone && b.isDone) {
+          return -1;
+        }
+        return 0;
       }
-      if (!a.isDone && b.isDone) {
-        return -1;
-      }
-      return 0;
-    }
 
-    if (filter === "COMPLETE") {
-      if (a.isDone && !b.isDone) {
-        return -1;
-      }
-      if (!a.isDone && b.isDone) {
-        return 1;
+      if (filter === "COMPLETE") {
+        if (a.isDone && !b.isDone) {
+          return -1;
+        }
+        if (!a.isDone && b.isDone) {
+          return 1;
+        }
+        return 0;
       }
       return 0;
-    }
-    return 0;
-  });
+    });
+  }, [filter, notes]);
 
   const renderToDos = () => {
     return filterToDos
@@ -154,10 +156,10 @@ const App = () => {
       ));
   };
 
-  const openEditModal = (id) => {
-    setEditingNoteId(id);
+  const openEditModal = useCallback((id) => {
     setIsEditModalOpen(true);
-  };
+    setEditingNoteId(id);
+  }, []);
 
   const closeEditModal = () => {
     setIsEditModalOpen(false);
