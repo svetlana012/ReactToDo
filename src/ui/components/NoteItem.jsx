@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
   const handleChange = (event) => {
     onToggle(id);
@@ -64,4 +66,4 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
   );
 };
 
-export default NoteItem;
+export default memo(NoteItem);
