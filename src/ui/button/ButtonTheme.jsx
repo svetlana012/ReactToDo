@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { ThemeContext } from "../../context/ThemeContext.jsx";
+
 const ButtonTheme = () => {
+  const { theme, setTheme } = useContext(ThemeContext);
   const handleClick = () => {
-    console.log("Кнопка нажата!");
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   return (

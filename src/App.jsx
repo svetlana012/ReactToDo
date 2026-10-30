@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useContext } from "react";
 
 import "./styles/style.css";
 import "./styles/global.css";
@@ -11,6 +11,8 @@ import ButtonAdd from "./ui/button/ButtonAdd";
 import Modal from "./ui/components/Modal";
 import Empty from "./ui/components/Empty";
 import EditModal from "./ui/components/EditModal";
+
+import { ThemeContext } from "./context/ThemeContext.jsx";
 
 const getDataFromLocalStorage = () => {
   try {
@@ -54,6 +56,8 @@ const App = () => {
   const [editingNoteId, setEditingNoteId] = useState(null);
 
   const [notes, setNotes] = useState(getDataFromLocalStorage);
+
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     try {
@@ -169,7 +173,7 @@ const App = () => {
   const editingNote = notes.find((note) => note.id === editingNoteId);
 
   return (
-    <main>
+    <main data-theme={theme}>
       <div className="page">
         <h1 className="todo__title">TODO LIST</h1>
         <div className="toolbar todo__toolbar">

@@ -90,6 +90,10 @@
   outline: none;
 }
 
+[data-theme="dark"] .search__input {
+  border-color: white;
+}
+
 .search__input::placeholder {
   color: var(--placeholder);
 }
@@ -100,6 +104,10 @@
   right: 14px;
   color: var(--accent);
   pointer-events: none;
+}
+
+[data-theme="dark"] .search__icon {
+  color: white;
 }
 
 /* filter */
@@ -121,8 +129,12 @@
 }
 
 .filter__option {
-  color: var(--text);
   background: #fff;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  text-transform: capitalize;
+  color: var(--accent);
 }
 
 /* theme-btn */
@@ -361,5 +373,3 @@
   margin-top: 6px;
   margin-bottom: 0;
 }
-
-
