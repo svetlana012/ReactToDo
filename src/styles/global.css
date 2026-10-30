@@ -6,7 +6,17 @@
   --line: #c3c1c1;
   --placeholder: #c3c1e5;
   --icon: #cdcdcd;
-}  
+} 
+
+[data-theme="dark"] {
+  --bg: #252525;
+  --accent: #8b85ff;
+  --text: #f5f5f5;
+  --muted: #b0b0b0;
+  --line: #555555;
+  --placeholder: #F7F7F7;
+  --icon: #aaaaaa;
+}
 
 button,
 select,
