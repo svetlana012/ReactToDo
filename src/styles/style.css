@@ -107,7 +107,7 @@
 }
 
 [data-theme="dark"] .search__icon {
-  color: white;
+  color: var(--placeholder);
 }
 
 /* filter */

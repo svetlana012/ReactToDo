@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useContext } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 import "./styles/style.css";
 import "./styles/global.css";
@@ -12,7 +12,7 @@ import Modal from "./ui/components/Modal";
 import Empty from "./ui/components/Empty";
 import EditModal from "./ui/components/EditModal";
 
-import { ThemeContext } from "./context/ThemeContext.jsx";
+import { useTheme } from "./context/ThemeContext.jsx";
 
 const getDataFromLocalStorage = () => {
   try {
@@ -57,7 +57,7 @@ const App = () => {
 
   const [notes, setNotes] = useState(getDataFromLocalStorage);
 
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useTheme();
 
   useEffect(() => {
     try {
