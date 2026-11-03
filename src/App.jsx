@@ -12,6 +12,8 @@ import Modal from "./ui/components/Modal";
 import Empty from "./ui/components/Empty";
 import EditModal from "./ui/components/EditModal";
 
+import { useTheme } from "./context/ThemeContext.jsx";
+
 const getDataFromLocalStorage = () => {
   try {
     const savedNotes = localStorage.getItem("notes");
@@ -54,6 +56,8 @@ const App = () => {
   const [editingNoteId, setEditingNoteId] = useState(null);
 
   const [notes, setNotes] = useState(getDataFromLocalStorage);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     try {
@@ -169,7 +173,7 @@ const App = () => {
   const editingNote = notes.find((note) => note.id === editingNoteId);
 
   return (
-    <main>
+    <main data-theme={theme}>
       <div className="page">
         <h1 className="todo__title">TODO LIST</h1>
         <div className="toolbar todo__toolbar">
