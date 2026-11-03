@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 import "./styles/style.css";
 import "./styles/global.css";
@@ -11,101 +11,19 @@ import ButtonAdd from "./ui/button/ButtonAdd";
 import Modal from "./ui/components/Modal";
 import Empty from "./ui/components/Empty";
 import EditModal from "./ui/components/EditModal";
+import useTodo from "./hooks/useTodo";
 
 import { useTheme } from "./context/ThemeContext.jsx";
 
-const getDataFromLocalStorage = () => {
-  try {
-    const savedNotes = localStorage.getItem("notes");
-
-    if (savedNotes === null) {
-      return [
-        {
-          title: "Выучить react",
-          id: Date.now(),
-          isDone: false,
-        },
-      ];
-    }
-
-    const parsedNotes = JSON.parse(savedNotes);
-
-    if (!Array.isArray(parsedNotes)) {
-      throw new Error("Сохранённые задачи должны быть массивом");
-    }
-
-    return parsedNotes;
-  } catch (error) {
-    console.error("Ошибка загрузки задач:", error);
-
-    return [
-      {
-        title: "Выучить react",
-        id: Date.now(),
-        isDone: false,
-      },
-    ];
-  }
-};
-
 const App = () => {
+  const { notes, addNote, deleteNote, toggleNote, updateNote } = useTodo();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState(null);
 
-  const [notes, setNotes] = useState(getDataFromLocalStorage);
-
   const { theme } = useTheme();
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("notes", JSON.stringify(notes));
-    } catch (error) {
-      console.error("Ошибка сохранения задач:", error);
-    }
-  }, [notes]);
-
-  const deleteNote = useCallback((taskId) => {
-    setNotes((prev) => {
-      return prev.filter((note) => note.id !== taskId);
-    });
-  }, []);
-
-  const addNote = (title) => {
-    setNotes((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        title: title,
-        isDone: false,
-      },
-    ]);
-  };
-
-  const toggleNote = useCallback((taskId) => {
-    setNotes((prev) =>
-      prev.map((note) => {
-        if (note.id === taskId) {
-          return { ...note, isDone: !note.isDone };
-        }
-        return note;
-      }),
-    );
-  }, []);
-
-  const updateNote = useCallback((id, newTitle) => {
-    setNotes((prev) =>
-      prev.map((note) => {
-        if (note.id === id) {
-          return { ...note, title: newTitle };
-        }
-
-        return note;
-      }),
-    );
-  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);

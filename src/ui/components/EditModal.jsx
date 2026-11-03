@@ -1,8 +1,11 @@
 import { useState } from "react";
+import useOutsideClick from "../../hooks/useOutsideClick";
 
 const EditModal = ({ onEdit, onClose, id, title }) => {
   const [value, setValue] = useState(title);
   const [error, setError] = useState("");
+
+  const modalRef = useOutsideClick(onClose);
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -25,7 +28,7 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
 
   return (
     <div className="modal" id="edit-note">
-      <div className="modal__dialog">
+      <div className="modal__dialog" ref={modalRef}>
         <h2 className="modal__title">EDIT NOTE</h2>
 
         <input
