@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 
 import "./styles/style.css";
 import "./styles/global.css";
@@ -15,10 +15,10 @@ import useTodo from "./hooks/useTodo";
 
 import { useTheme } from "./context/ThemeContext.jsx";
 
-const App = () => {
-  const { notes, addNote, deleteNote, toggleNote, updateNote } = useTodo();
+const App = () => {  
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
+  const { notes, addNote, deleteNote, toggleNote, updateNote, filterToDos } = useTodo(filter);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState(null);
@@ -32,35 +32,6 @@ const App = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
-  const filterToDos = useMemo(() => {
-    return [...notes].sort((a, b) => {
-      if (filter === "ALL") {
-        return 0;
-      }
-
-      if (filter === "INCOMPLETE") {
-        if (a.isDone && !b.isDone) {
-          return 1;
-        }
-        if (!a.isDone && b.isDone) {
-          return -1;
-        }
-        return 0;
-      }
-
-      if (filter === "COMPLETE") {
-        if (a.isDone && !b.isDone) {
-          return -1;
-        }
-        if (!a.isDone && b.isDone) {
-          return 1;
-        }
-        return 0;
-      }
-      return 0;
-    });
-  }, [filter, notes]);
 
   const renderToDos = () => {
     return filterToDos

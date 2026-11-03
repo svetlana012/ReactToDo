@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
-const useTodo = () => {
+const useTodo = (filter) => {
   const getDataFromLocalStorage = () => {
     try {
       const savedNotes = localStorage.getItem("notes");
@@ -85,7 +85,36 @@ const useTodo = () => {
     );
   }, []);
 
-  return { notes, setNotes, addNote, deleteNote, toggleNote, updateNote };
+  const filterToDos = useMemo(() => {
+    return [...notes].sort((a, b) => {
+      if (filter === "ALL") {
+        return 0;
+      }
+
+      if (filter === "INCOMPLETE") {
+        if (a.isDone && !b.isDone) {
+          return 1;
+        }
+        if (!a.isDone && b.isDone) {
+          return -1;
+        }
+        return 0;
+      }
+
+      if (filter === "COMPLETE") {
+        if (a.isDone && !b.isDone) {
+          return -1;
+        }
+        if (!a.isDone && b.isDone) {
+          return 1;
+        }
+        return 0;
+      }
+      return 0;
+    });
+  }, [filter, notes]);
+
+  return { notes, addNote, deleteNote, toggleNote, updateNote, filterToDos };
 };
 
 export default useTodo;
