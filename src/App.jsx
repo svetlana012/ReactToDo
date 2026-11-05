@@ -18,7 +18,7 @@ import { useTheme } from "./context/ThemeContext.jsx";
 const App = () => {  
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
-  const { notes, addNote, deleteNote, toggleNote, updateNote, filterToDos } = useTodo(filter);
+  const { notes, addNote, deleteNote, toggleNote, updateNote, filterToDos, isLoading } = useTodo(filter);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState(null);
