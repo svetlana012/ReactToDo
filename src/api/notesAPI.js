@@ -4,9 +4,19 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+const checkResponse = (response) => {
+  if (!response.ok) {
+    throw new Error(`HTTP ошибка: ${response.status}`);
+  }
+
+  return response;
+};
+
 const notesAPI = {
   getNotes: () => {
-    return fetch(URL).then((response) => response.json());
+    return fetch(URL)
+      .then(checkResponse)
+      .then((response) => response.json());
   },
 
   addNote: (note) => {
@@ -14,13 +24,15 @@ const notesAPI = {
       method: "POST",
       headers,
       body: JSON.stringify(note),
-    }).then((response) => response.json());
+    })
+      .then(checkResponse)
+      .then((response) => response.json());
   },
 
   deleteNote: (id) => {
     return fetch(`${URL}/${id}`, {
       method: "DELETE",
-    });
+    }).then(checkResponse);
   },
 
   toggleNote: (id, isDone) => {
@@ -28,7 +40,7 @@ const notesAPI = {
       method: "PATCH",
       headers,
       body: JSON.stringify({ isDone }),
-    });
+    }).then(checkResponse);
   },
 
   updateNote: (id, newTitle) => {
@@ -36,8 +48,8 @@ const notesAPI = {
       method: "PATCH",
       headers,
       body: JSON.stringify({ title: newTitle }),
-    });
-  }
+    }).then(checkResponse);
+  },
 };
 
 export default notesAPI;

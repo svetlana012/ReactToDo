@@ -6,31 +6,49 @@ const useTodo = (filter) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    notesAPI.getNotes().then((data) => {
-      setNotes(data);
-      setIsLoading(false);
-    });
+    const loadNotes = async () => {
+      try {
+        const data = await notesAPI.getNotes();
+        setNotes(data);
+      } catch (error) {
+        console.error("Ошибка загрузки задач:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadNotes();
   }, []);
 
-  const addNote = (title) => {
+  const addNote = async (title) => {
     const newNote = {
       title,
       isDone: false,
     };
 
-    notesAPI.addNote(newNote).then((addedNote) => {
+    try {
+      const addedNote = await notesAPI.addNote(newNote);
+
       setNotes((prev) => [...prev, addedNote]);
-    });
+    } catch (error) {
+      console.error("Ошибка добавления задачи:", error);
+    }
   };
 
-  const deleteNote = useCallback((taskId) => {
-    notesAPI.deleteNote(taskId).then(() => {
+  const deleteNote = useCallback(async (taskId) => {
+    try {
+      await notesAPI.deleteNote(taskId);
+
       setNotes((prev) => prev.filter((note) => note.id !== taskId));
-    });
+    } catch (error) {
+      console.error("Ошибка удаления задачи:", error);
+    }
   }, []);
 
-  const toggleNote = useCallback((taskId, isDone) => {
-    notesAPI.toggleNote(taskId, isDone).then(() => {
+  const toggleNote = useCallback(async (taskId, isDone) => {
+    try {
+      await notesAPI.toggleNote(taskId, isDone);
+
       setNotes((prev) =>
         prev.map((note) => {
           if (note.id === taskId) {
@@ -39,11 +57,15 @@ const useTodo = (filter) => {
           return note;
         }),
       );
-    });
+    } catch (error) {
+      console.error("Ошибка переключения задачи:", error);
+    }
   }, []);
 
-  const updateNote = useCallback((id, newTitle) => {
-    notesAPI.updateNote(id, newTitle).then(() => {
+  const updateNote = useCallback(async (id, newTitle) => {
+    try {
+      await notesAPI.updateNote(id, newTitle);
+
       setNotes((prev) =>
         prev.map((note) => {
           if (note.id === id) {
@@ -53,37 +75,22 @@ const useTodo = (filter) => {
           return note;
         }),
       );
-    });
-  }, []);
+    } catch (error) {
+      console.error("Ошибка обновления задачи:", error);
+    }
+  }, []);  
 
   const filterToDos = useMemo(() => {
-    return [...notes].sort((a, b) => {
-      if (filter === "ALL") {
-        return 0;
-      }
+  if (filter === "INCOMPLETE") {
+    return notes.filter((note) => !note.isDone);
+  }
 
-      if (filter === "INCOMPLETE") {
-        if (a.isDone && !b.isDone) {
-          return 1;
-        }
-        if (!a.isDone && b.isDone) {
-          return -1;
-        }
-        return 0;
-      }
+  if (filter === "COMPLETE") {
+    return notes.filter((note) => note.isDone);
+  }
 
-      if (filter === "COMPLETE") {
-        if (a.isDone && !b.isDone) {
-          return -1;
-        }
-        if (!a.isDone && b.isDone) {
-          return 1;
-        }
-        return 0;
-      }
-      return 0;
-    });
-  }, [filter, notes]);
+  return notes;
+}, [filter, notes]);
 
   return {
     notes,
