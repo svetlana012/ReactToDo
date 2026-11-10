@@ -1,7 +1,10 @@
+import styles from "./ButtonAdd.module.scss";
+
 const ButtonAdd = ({ onAddNote }) => {
   return (
     <button
-      className="add-btn todo__add"
+      className={styles["add__btn"]}
+      type="button"
       aria-label="Add note"
       onClick={onAddNote}
     >

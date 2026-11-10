@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import useOutsideClick from "../../hooks/useOutsideClick";
+import useOutsideClick from "../../../hooks/useOutsideClick";
+
+import styles from "./Modal.module.scss";
+import buttonStyles from "../../../styles/Buttons.module.scss";
 
 const Modal = ({ onAdd, onClose }) => {
   const [value, setValue] = useState("");
@@ -37,12 +40,14 @@ const Modal = ({ onAdd, onClose }) => {
   };
 
   return (
-    <div className="modal" id="new-note">
-      <div className="modal__dialog" ref={modalRef}>
-        <h2 className="modal__title">NEW NOTE</h2>
+    <div className={styles.modal} id="new-note">
+      <div className={styles.modal__dialog} ref={modalRef}>
+        <h2 className={styles.modal__title}>NEW NOTE</h2>
 
         <input
-          className={`modal__input ${error ? "modal__input--error" : ""}`}
+          className={`${styles.modal__input} ${
+            error ? styles["modal__input--error"] : ""
+          }`}
           type="text"
           placeholder="Input your note..."
           onChange={handleChange}
@@ -50,15 +55,19 @@ const Modal = ({ onAdd, onClose }) => {
           ref={inputRef}
         />
 
-        {error && <p className="modal__error">{error}</p>}
+        {error && <p className={styles.modal__error}>{error}</p>}
 
-        <div className="modal__actions">
-          <button className="btn btn--outline" type="button" onClick={onClose}>
+        <div className={styles.modal__actions}>
+          <button
+            className={`${buttonStyles.btn} ${buttonStyles.outline}`}
+            type="button"
+            onClick={onClose}
+          >
             CANCEL
           </button>
 
           <button
-            className="btn btn--primary"
+            className={`${buttonStyles.btn} ${buttonStyles.primary}`}
             type="button"
             onClick={handleApply}
           >

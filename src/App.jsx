@@ -1,24 +1,34 @@
 import { useState, useCallback } from "react";
 
-import "./styles/style.css";
-import "./styles/global.css";
 
-import Search from "./ui/components/Search";
-import ButtonFilter from "./ui/button/ButtonFilter";
-import ButtonTheme from "./ui/button/ButtonTheme";
-import NoteItem from "./ui/components/NoteItem";
-import ButtonAdd from "./ui/button/ButtonAdd";
-import Modal from "./ui/components/Modal";
-import Empty from "./ui/components/Empty";
-import EditModal from "./ui/components/EditModal";
+import "./styles/global.scss";
+
+import Search from "./ui/components/Search/Search.jsx";
+import ButtonFilter from "./ui/button/ButtonFilter/ButtonFilter.jsx";
+import ButtonTheme from "./ui/button/ButtonTheme/ButtonTheme.jsx";
+import NoteItem from "./ui/components/NoteItem/NoteItem.jsx";
+import ButtonAdd from "./ui/button/ButtonAdd/ButtonAdd.jsx";
+import Modal from "./ui/components/Modal/Modal.jsx";
+import Empty from "./ui/components/Empty/Empty.jsx";
+import EditModal from "./ui/components/EditModal/EditModal.jsx";
 import useTodo from "./hooks/useTodo";
 
 import { useTheme } from "./context/ThemeContext.jsx";
 
-const App = () => {  
+import styles from "./styles/App.module.scss";
+
+const App = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
-  const { notes, addNote, deleteNote, toggleNote, updateNote, filterToDos, isLoading } = useTodo(filter);
+  const {
+    notes,
+    addNote,
+    deleteNote,
+    toggleNote,
+    updateNote,
+    filterToDos,
+    isLoading,
+  } = useTodo(filter);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState(null);
@@ -63,25 +73,37 @@ const App = () => {
 
   return (
     <main data-theme={theme}>
-      <div className="page">
-        <h1 className="todo__title">TODO LIST</h1>
-        <div className="toolbar todo__toolbar">
-          <Search onSearch={setSearch} />
-          <ButtonFilter onFilterChange={setFilter} />
-          <ButtonTheme />
+      <div className={styles.page}>
+        <div className={styles.todo}>
+          <h1 className={styles.title}>TODO LIST</h1>
+          <div className={styles.toolbar}>
+            <div className={styles.search}>
+              <Search onSearch={setSearch} />
+            </div>
+            <div className={styles.filter}>
+              <ButtonFilter onFilterChange={setFilter} />
+            </div>
+            <div className={styles.theme}>
+              <ButtonTheme />
+            </div>
+          </div>
+          <ul className={styles.notes}>{renderToDos()}</ul>
+          <div className={styles.addButton}>
+            <ButtonAdd onAddNote={openModal} />
+          </div>
+          {isModalOpen && <Modal onAdd={addNote} onClose={closeModal} />}
+          <div className={styles.empty}>
+            <Empty />
+          </div>
+          {isEditModalOpen && editingNote && (
+            <EditModal
+              id={editingNote.id}
+              title={editingNote.title}
+              onEdit={updateNote}
+              onClose={closeEditModal}
+            />
+          )}
         </div>
-        <ul className="notes todo__notes">{renderToDos()}</ul>
-        <ButtonAdd onAddNote={openModal} />
-        {isModalOpen && <Modal onAdd={addNote} onClose={closeModal} />}
-        <Empty />
-        {isEditModalOpen && editingNote && (
-          <EditModal
-            id={editingNote.id}
-            title={editingNote.title}
-            onEdit={updateNote}
-            onClose={closeEditModal}
-          />
-        )}
       </div>
     </main>
   );
