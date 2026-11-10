@@ -1,120 +1,106 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import notesAPI from "../api/notesAPI";
 
 const useTodo = (filter) => {
-  const getDataFromLocalStorage = () => {
-    try {
-      const savedNotes = localStorage.getItem("notes");
-
-      if (savedNotes === null) {
-        return [
-          {
-            title: "Выучить react",
-            id: Date.now(),
-            isDone: false,
-          },
-        ];
-      }
-
-      const parsedNotes = JSON.parse(savedNotes);
-
-      if (!Array.isArray(parsedNotes)) {
-        throw new Error("Сохранённые задачи должны быть массивом");
-      }
-
-      return parsedNotes;
-    } catch (error) {
-      console.error("Ошибка загрузки задач:", error);
-
-      return [
-        {
-          title: "Выучить react",
-          id: Date.now(),
-          isDone: false,
-        },
-      ];
-    }
-  };
-
-  const [notes, setNotes] = useState(getDataFromLocalStorage);
+  const [notes, setNotes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      localStorage.setItem("notes", JSON.stringify(notes));
-    } catch (error) {
-      console.error("Ошибка сохранения задач:", error);
-    }
-  }, [notes]);
+    const loadNotes = async () => {
+      try {
+        const data = await notesAPI.getNotes();
+        setNotes(data);
+      } catch (error) {
+        console.error("Ошибка загрузки задач:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const addNote = (title) => {
-    setNotes((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        title: title,
-        isDone: false,
-      },
-    ]);
+    loadNotes();
+  }, []);
+
+  const addNote = async (title) => {
+    const newNote = {
+      title,
+      isDone: false,
+    };
+
+    try {
+      const addedNote = await notesAPI.addNote(newNote);
+
+      setNotes((prev) => [...prev, addedNote]);
+    } catch (error) {
+      console.error("Ошибка добавления задачи:", error);
+    }
   };
 
-  const deleteNote = useCallback((taskId) => {
-    setNotes((prev) => {
-      return prev.filter((note) => note.id !== taskId);
-    });
+  const deleteNote = useCallback(async (taskId) => {
+    try {
+      await notesAPI.deleteNote(taskId);
+
+      setNotes((prev) => prev.filter((note) => note.id !== taskId));
+    } catch (error) {
+      console.error("Ошибка удаления задачи:", error);
+    }
   }, []);
 
-  const toggleNote = useCallback((taskId) => {
-    setNotes((prev) =>
-      prev.map((note) => {
-        if (note.id === taskId) {
-          return { ...note, isDone: !note.isDone };
-        }
-        return note;
-      }),
-    );
+  const toggleNote = useCallback(async (taskId, isDone) => {
+    try {
+      await notesAPI.toggleNote(taskId, isDone);
+
+      setNotes((prev) =>
+        prev.map((note) => {
+          if (note.id === taskId) {
+            return { ...note, isDone };
+          }
+          return note;
+        }),
+      );
+    } catch (error) {
+      console.error("Ошибка переключения задачи:", error);
+    }
   }, []);
 
-  const updateNote = useCallback((id, newTitle) => {
-    setNotes((prev) =>
-      prev.map((note) => {
-        if (note.id === id) {
-          return { ...note, title: newTitle };
-        }
+  const updateNote = useCallback(async (id, newTitle) => {
+    try {
+      await notesAPI.updateNote(id, newTitle);
 
-        return note;
-      }),
-    );
-  }, []);
+      setNotes((prev) =>
+        prev.map((note) => {
+          if (note.id === id) {
+            return { ...note, title: newTitle };
+          }
+
+          return note;
+        }),
+      );
+    } catch (error) {
+      console.error("Ошибка обновления задачи:", error);
+    }
+  }, []);  
 
   const filterToDos = useMemo(() => {
-    return [...notes].sort((a, b) => {
-      if (filter === "ALL") {
-        return 0;
-      }
+  if (filter === "INCOMPLETE") {
+    return notes.filter((note) => !note.isDone);
+  }
 
-      if (filter === "INCOMPLETE") {
-        if (a.isDone && !b.isDone) {
-          return 1;
-        }
-        if (!a.isDone && b.isDone) {
-          return -1;
-        }
-        return 0;
-      }
+  if (filter === "COMPLETE") {
+    return notes.filter((note) => note.isDone);
+  }
 
-      if (filter === "COMPLETE") {
-        if (a.isDone && !b.isDone) {
-          return -1;
-        }
-        if (!a.isDone && b.isDone) {
-          return 1;
-        }
-        return 0;
-      }
-      return 0;
-    });
-  }, [filter, notes]);
+  return notes;
+}, [filter, notes]);
 
-  return { notes, addNote, deleteNote, toggleNote, updateNote, filterToDos };
+  return {
+    notes,
+    addNote,
+    deleteNote,
+    toggleNote,
+    updateNote,
+    filterToDos,
+    isLoading,
+  };
 };
 
 export default useTodo;
