@@ -2,7 +2,6 @@ import { useState } from "react";
 import useOutsideClick from "../../../hooks/useOutsideClick";
 
 import modalStyles from "../Modal/Modal.module.scss";
-import buttonStyles from "../../../styles/Buttons.module.scss";
 
 const EditModal = ({ onEdit, onClose, id, title }) => {
   const [value, setValue] = useState(title);
@@ -48,7 +47,7 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
 
         <div className={modalStyles.modal__actions}>
           <button
-            className={`${buttonStyles.btn} ${buttonStyles.outline}`}
+            className={`${modalStyles.btn} ${modalStyles.outline}`}
             type="button"
             onClick={onClose}
           >
@@ -56,7 +55,7 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
           </button>
 
           <button
-            className={`${buttonStyles.btn} ${buttonStyles.primary}`}
+            className={`${modalStyles.btn} ${modalStyles.primary}`}
             type="button"
             onClick={handleApply}
           >

@@ -6,7 +6,7 @@ const ButtonFilter = ({ onFilterChange }) => {
   };
   return (
     <select
-      className={`${styles.filter}`}
+      className={styles.filter}
       aria-label="Filter"
       onChange={handleChange}
     >
