@@ -1,5 +1,6 @@
 import { useState } from "react";
-import useOutsideClick from "../../../hooks/useOutsideClick";
+import clsx from "clsx";
+import useOutsideClick from "@/hooks/useOutsideClick";
 
 import modalStyles from "../Modal/Modal.module.scss";
 
@@ -34,9 +35,9 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
         <h2 className={modalStyles.modal__title}>EDIT NOTE</h2>
 
         <input
-          className={`${modalStyles.modal__input} ${
-            error ? modalStyles["modal__input--error"] : ""
-          }`}
+          className={clsx(modalStyles.modal__input, {
+            [modalStyles["modal__input--error"]]: error
+          })}
           type="text"
           placeholder="Edit your note..."
           value={value}
@@ -47,7 +48,7 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
 
         <div className={modalStyles.modal__actions}>
           <button
-            className={`${modalStyles.btn} ${modalStyles.outline}`}
+            className={clsx(modalStyles.btn, modalStyles.outline)}
             type="button"
             onClick={onClose}
           >
@@ -55,7 +56,7 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
           </button>
 
           <button
-            className={`${modalStyles.btn} ${modalStyles.primary}`}
+            className={clsx(modalStyles.btn, modalStyles.primary)}
             type="button"
             onClick={handleApply}
           >
