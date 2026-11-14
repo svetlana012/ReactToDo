@@ -1,0 +1,64 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+}
+
+.todo {
+  position: relative;
+  width: 750px;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding-top: 44px;
+}
+
+.title {
+  text-align: center;
+  font-family: "Kanit", sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  text-transform: uppercase;
+}
+
+.toolbar {
+  display: flex;
+  gap: 16px;
+  width: 520px;
+  max-width: 100%;
+  margin: 21px auto 0;
+}
+
+.search {
+  flex: 1;
+  min-width: 0;
+}
+
+.filter {
+  width: 85px;
+  flex-shrink: 0;
+}
+
+.theme {
+  width: 38px;
+  flex-shrink: 0;
+}
+
+.notes {
+  width: 520px;
+  max-width: 100%;
+  margin: 15px auto 0;
+  list-style: none;
+}
+
+.addButton {
+  position: absolute;
+  right: 8px;
+  bottom: 32px;
+}
+
+.empty {
+  margin-top: 30px;
+}

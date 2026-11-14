@@ -1,0 +1,19 @@
+.empty {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty__img {
+  display: block;
+  width: 221px;
+  height: 174px;
+}
+
+.empty__text {
+  margin-top: 21px;
+  font-family: "Kanit", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+}

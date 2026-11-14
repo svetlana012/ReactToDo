@@ -1,4 +1,6 @@
-import { useTheme } from "../../context/ThemeContext.jsx";
+import { useTheme } from "../../../context/ThemeContext.jsx";
+
+import styles from "./ButtonTheme.module.scss";
 
 const ButtonTheme = () => {
   const { theme, setTheme } = useTheme();
@@ -8,7 +10,7 @@ const ButtonTheme = () => {
 
   return (
     <button
-      className="theme-btn toolbar__theme"
+      className={styles.theme__btn}
       type="button"
       aria-label="Toggle theme"
       onClick={handleClick}
