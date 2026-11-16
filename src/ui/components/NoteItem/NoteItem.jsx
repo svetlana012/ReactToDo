@@ -1,26 +1,28 @@
 import { memo } from "react";
 
+import styles from "./NoteItem.module.scss";
+
 const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
-  const handleChange = (event) => {
+  const handleChange = () => {
     onToggle(id);
   };
 
   return (
-    <li className="notes__item">
-      <div className="note">
-        <label className="note__label">
+    <li className={styles.notes__item}>
+      <div className={styles.note}>
+        <label className={styles.note__label}>
           <input
-            className="note__checkbox"
+            className={styles.note__checkbox}
             type="checkbox"
             onChange={handleChange}
             checked={isDone}
           />
 
-          <span className="note__text">{title}</span>
+          <span className={styles.note__text}>{title}</span>
         </label>
-        <div className="note__actions">
+        <div className={styles.note__actions}>
           <button
-            className="icon-btn"
+            className={styles.icon__btn}
             type="button"
             aria-label="Edit"
             onClick={() => onEdit(id)}
@@ -41,7 +43,7 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
           </button>
 
           <button
-            className="icon-btn"
+            className={styles.icon__btn}
             type="button"
             aria-label="Delete"
             onClick={() => onDelete(id)}

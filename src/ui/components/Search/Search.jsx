@@ -1,18 +1,20 @@
+import styles from './Search.module.scss';
+
 const Search = ({ onSearch }) => {
   const handleChange = (event) => {
     onSearch(event.target.value);
   };
 
   return (
-    <div className="search toolbar__search">
+    <div className={`${styles.search}`}>
       <input
-        className="search__input"
+        className={styles.search__input}
         type="text"
         placeholder="Search note..."
         onChange={handleChange}
       />
       <svg
-        className="search__icon"
+        className={styles.search__icon}
         width="24"
         height="24"
         viewBox="0 0 24 24"
