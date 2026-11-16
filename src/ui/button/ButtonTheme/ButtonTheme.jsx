@@ -1,4 +1,4 @@
-import { useTheme } from "../../../context/ThemeContext.jsx";
+import { useTheme } from "@/context/ThemeContext.jsx";
 
 import styles from "./ButtonTheme.module.scss";
 
