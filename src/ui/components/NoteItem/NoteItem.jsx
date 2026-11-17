@@ -1,14 +1,24 @@
-import { memo } from "react";
+import { memo, useState } from "react";
+import clsx from "clsx";
 
 import styles from "./NoteItem.module.scss";
 
 const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleChange = () => {
     onToggle(id);
   };
 
+  const handleDelete = () => {
+    setIsDeleting(true);
+    setTimeout(() => {
+      onDelete(id);
+    }, 300);
+  };
+
   return (
-    <li className={styles.notes__item}>
+    <li className={clsx(styles.notes__item, isDeleting && styles["notes__item--deleting"])}>
       <div className={styles.note}>
         <label className={styles.note__label}>
           <input
@@ -46,7 +56,7 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
             className={styles.icon__btn}
             type="button"
             aria-label="Delete"
-            onClick={() => onDelete(id)}
+            onClick={handleDelete}
           >
             <svg
               width="16"
