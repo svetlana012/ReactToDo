@@ -1,5 +1,6 @@
 import { memo, useState } from "react";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 
 import styles from "./NoteItem.module.scss";
 
@@ -18,7 +19,12 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
   };
 
   return (
-    <li className={clsx(styles.notes__item, isDeleting && styles["notes__item--deleting"])}>
+    <li
+      className={clsx(
+        styles.notes__item,
+        isDeleting && styles["notes__item--deleting"],
+      )}
+    >
       <div className={styles.note}>
         <label className={styles.note__label}>
           <input
@@ -26,10 +32,11 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
             type="checkbox"
             onChange={handleChange}
             checked={isDone}
-          />
-
-          <span className={styles.note__text}>{title}</span>
+          />          
         </label>
+        <Link className={styles.note__text} to={`/tasks/${id}`}>
+          {title}
+        </Link>
         <div className={styles.note__actions}>
           <button
             className={styles.icon__btn}

@@ -6,7 +6,9 @@ const headers = {
 
 const checkResponse = (response) => {
   if (!response.ok) {
-    throw new Error(`HTTP ошибка: ${response.status}`);
+    const error = new Error(`Ошибка: ${response.status}`);
+    error.status = response.status;
+    throw error;
   }
 
   return response;
@@ -15,6 +17,12 @@ const checkResponse = (response) => {
 const notesAPI = {
   getNotes: () => {
     return fetch(URL)
+      .then(checkResponse)
+      .then((response) => response.json());
+  },
+
+  getNoteById: (id) => {
+    return fetch(`${URL}/${id}`)
       .then(checkResponse)
       .then((response) => response.json());
   },
@@ -48,7 +56,9 @@ const notesAPI = {
       method: "PATCH",
       headers,
       body: JSON.stringify({ title: newTitle }),
-    }).then(checkResponse);
+    })
+      .then(checkResponse)
+      .then((response) => response.json());
   },
 };
 
