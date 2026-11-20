@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-
+import { Routes, Route } from "react-router-dom";
+import NotePage from "./pages/NotePage/NotePage.jsx";
 
 import "./styles/global.scss";
 
@@ -72,40 +73,55 @@ const App = () => {
   const editingNote = notes.find((note) => note.id === editingNoteId);
 
   return (
-    <main data-theme={theme}>
-      <div className={styles.page}>
-        <div className={styles.todo}>
-          <h1 className={styles.title}>TODO LIST</h1>
-          <div className={styles.toolbar}>
-            <div className={styles.search}>
-              <Search onSearch={setSearch} />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <main data-theme={theme}>
+            <div className={styles.page}>
+              <div className={styles.todo}>
+                <h1 className={styles.title}>TODO LIST</h1>
+                <div className={styles.toolbar}>
+                  <div className={styles.search}>
+                    <Search onSearch={setSearch} />
+                  </div>
+                  <div className={styles.filter}>
+                    <ButtonFilter onFilterChange={setFilter} />
+                  </div>
+                  <div className={styles.theme}>
+                    <ButtonTheme />
+                  </div>
+                </div>
+                <ul className={styles.notes}>{renderToDos()}</ul>
+                <div className={styles.addButton}>
+                  <ButtonAdd onAddNote={openModal} />
+                </div>
+                {isModalOpen && <Modal onAdd={addNote} onClose={closeModal} />}
+                <div className={styles.empty}>
+                  <Empty />
+                </div>
+                {isEditModalOpen && editingNote && (
+                  <EditModal
+                    id={editingNote.id}
+                    title={editingNote.title}
+                    onEdit={updateNote}
+                    onClose={closeEditModal}
+                  />
+                )}
+              </div>
             </div>
-            <div className={styles.filter}>
-              <ButtonFilter onFilterChange={setFilter} />
-            </div>
-            <div className={styles.theme}>
-              <ButtonTheme />
-            </div>
-          </div>
-          <ul className={styles.notes}>{renderToDos()}</ul>
-          <div className={styles.addButton}>
-            <ButtonAdd onAddNote={openModal} />
-          </div>
-          {isModalOpen && <Modal onAdd={addNote} onClose={closeModal} />}
-          <div className={styles.empty}>
-            <Empty />
-          </div>
-          {isEditModalOpen && editingNote && (
-            <EditModal
-              id={editingNote.id}
-              title={editingNote.title}
-              onEdit={updateNote}
-              onClose={closeEditModal}
-            />
-          )}
-        </div>
-      </div>
-    </main>
+          </main>
+        }
+      />
+      <Route
+        path="/tasks/:id"
+        element={
+          <main data-theme={theme}>
+            <NotePage onEdit={updateNote} onDelete={deleteNote} />
+          </main>
+        }
+      />
+    </Routes>
   );
 };
 
