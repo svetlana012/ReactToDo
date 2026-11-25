@@ -7,6 +7,7 @@ import modalStyles from "../Modal/Modal.module.scss";
 const EditModal = ({ onEdit, onClose, id, title }) => {
   const [value, setValue] = useState(title);
   const [error, setError] = useState("");
+  const [serverError, setServerError] = useState("");
 
   const modalRef = useOutsideClick(onClose);
 
@@ -14,18 +15,26 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
     setValue(event.target.value);
     if (event.target.value.trim()) {
       setError("");
+      setServerError("");
     }
   };
 
-  const handleApply = () => {
+  const handleApply = async () => {
     const newTitle = value.trim();
 
     if (!newTitle) {
-      setError("Note title cannot be empty");
+      setError("Заголовок не может быть пустым");
       return;
     }
 
-    onEdit(id, newTitle);
+    const success = await onEdit(id, newTitle);
+
+    if (!success) {
+      setServerError(
+        "Ошибка при обновлении заметки. Пожалуйста, попробуйте еще раз.",
+      );
+    }
+    setServerError("");
     onClose();
   };
 
@@ -36,16 +45,16 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
 
         <input
           className={clsx(modalStyles.modal__input, {
-            [modalStyles["modal__input--error"]]: error
+            [modalStyles["modal__input--error"]]: error,
           })}
           type="text"
-          placeholder="Edit your note..."
+          placeholder="Отредактируйте заметку..."
           value={value}
           onChange={handleChange}
         />
 
-        {error && <p className={modalStyles.modal__error}>{error}</p>}
-
+        {error && <div className={modalStyles.modal__error}>{error}</div>}
+        {serverError && <div className={modalStyles.modal__error}>{serverError}</div>}
         <div className={modalStyles.modal__actions}>
           <button
             className={clsx(modalStyles.btn, modalStyles.outline)}

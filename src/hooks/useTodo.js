@@ -30,18 +30,21 @@ const useTodo = (filter) => {
       const addedNote = await notesAPI.addNote(newNote);
 
       setNotes((prev) => [...prev, addedNote]);
+      return true
     } catch (error) {
       console.error("Ошибка добавления задачи:", error);
+      return false
     }
   };
 
   const deleteNote = useCallback(async (taskId) => {
     try {
       await notesAPI.deleteNote(taskId);
-
       setNotes((prev) => prev.filter((note) => note.id !== taskId));
+      return true;
     } catch (error) {
       console.error("Ошибка удаления задачи:", error);
+      return false;
     }
   }, []);
 
@@ -75,8 +78,10 @@ const useTodo = (filter) => {
           return note;
         }),
       );
+      return true;
     } catch (error) {
       console.error("Ошибка обновления задачи:", error);
+      return false;
     }
   }, []);  
 

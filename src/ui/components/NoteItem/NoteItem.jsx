@@ -6,6 +6,7 @@ import styles from "./NoteItem.module.scss";
 
 const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   const handleChange = () => {
     onToggle(id);
@@ -13,8 +14,14 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
 
   const handleDelete = () => {
     setIsDeleting(true);
-    setTimeout(() => {
-      onDelete(id);
+    setDeleteError("");
+    setTimeout(async () => {
+      const success = await onDelete(id);
+
+      if (!success) {
+        setIsDeleting(false);
+        setDeleteError("Не удалось удалить задачу. Попробуйте ещё раз.");
+      }
     }, 300);
   };
 
@@ -32,7 +39,8 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
             type="checkbox"
             onChange={handleChange}
             checked={isDone}
-          />          
+          />
+          
         </label>
         <Link className={styles.note__text} to={`/tasks/${id}`}>
           {title}
@@ -81,6 +89,7 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
           </button>
         </div>
       </div>
+      {deleteError && <div>{deleteError}</div>}
     </li>
   );
 };
