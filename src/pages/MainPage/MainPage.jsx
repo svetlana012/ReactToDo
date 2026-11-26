@@ -5,7 +5,7 @@ import ButtonAdd from "@/ui/button/ButtonAdd/ButtonAdd.jsx";
 import Modal from "@/ui/components/Modal/Modal.jsx";
 import Empty from "@/ui/components/Empty/Empty.jsx";
 import EditModal from "@/ui/components/EditModal/EditModal.jsx";
-import useApp from "@/hooks/useApp.jsx";
+import useApp from "@/hooks/useMainPage.jsx";
 import styles from "@/styles/App.module.scss";
 
 const MainPage = () => {

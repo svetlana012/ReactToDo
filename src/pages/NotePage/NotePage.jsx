@@ -12,7 +12,6 @@ const NotePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionError, setActionError] = useState(null);
-  const [retryCount, setRetryCount] = useState(0);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { theme } = useTheme();
 

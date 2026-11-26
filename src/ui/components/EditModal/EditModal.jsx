@@ -7,16 +7,12 @@ import modalStyles from "../Modal/Modal.module.scss";
 const EditModal = ({ onEdit, onClose, id, title }) => {
   const [value, setValue] = useState(title);
   const [error, setError] = useState("");
-  const [serverError, setServerError] = useState("");
 
   const modalRef = useOutsideClick(onClose);
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    if (event.target.value.trim()) {
-      setError("");
-      setServerError("");
-    }
+    setError("");
   };
 
   const handleApply = async () => {
@@ -30,11 +26,12 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
     const success = await onEdit(id, newTitle);
 
     if (!success) {
-      setServerError(
+      setError(
         "Ошибка при обновлении заметки. Пожалуйста, попробуйте еще раз.",
       );
+      return;
     }
-    setServerError("");
+    setError("");
     onClose();
   };
 
@@ -54,7 +51,7 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
         />
 
         {error && <div className={modalStyles.modal__error}>{error}</div>}
-        {serverError && <div className={modalStyles.modal__error}>{serverError}</div>}
+
         <div className={modalStyles.modal__actions}>
           <button
             className={clsx(modalStyles.btn, modalStyles.outline)}
