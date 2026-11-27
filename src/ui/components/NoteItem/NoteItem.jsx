@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
+import delay from "@/utils/delay";
 
 import styles from "./NoteItem.module.scss";
 
@@ -12,17 +13,23 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
     onToggle(id);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (isDeleting) return;
     setIsDeleting(true);
     setDeleteError("");
-    setTimeout(async () => {
-      const success = await onDelete(id);
 
-      if (!success) {
-        setIsDeleting(false);
+    try {
+      await delay(300);
+      const response = await onDelete(id);
+
+      if (!response) {
         setDeleteError("Не удалось удалить задачу. Попробуйте ещё раз.");
       }
-    }, 300);
+    } catch {
+      setDeleteError("Не удалось удалить задачу. Попробуйте ещё раз.");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -40,7 +47,6 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
             onChange={handleChange}
             checked={isDone}
           />
-          
         </label>
         <Link className={styles.note__text} to={`/tasks/${id}`}>
           {title}
@@ -72,6 +78,7 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
             type="button"
             aria-label="Delete"
             onClick={handleDelete}
+            disabled={isDeleting}
           >
             <svg
               width="16"

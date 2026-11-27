@@ -7,8 +7,6 @@ import styles from "./Modal.module.scss";
 const Modal = ({ onAdd, onClose }) => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
-  const [serverError, setServerError] = useState("");
-
   const inputRef = useRef(null);
   const modalRef = useOutsideClick(onClose);
 
@@ -19,7 +17,7 @@ const Modal = ({ onAdd, onClose }) => {
   }, []);
 
   const handleChange = (event) => {
-    setServerError("");
+    setError("");
     setValue(event.target.value);
 
     if (event.target.value.trim()) {
@@ -38,7 +36,7 @@ const Modal = ({ onAdd, onClose }) => {
     const success = await onAdd(newTitle);
 
     if (!success) {
-      setServerError("Не удалось добавить задачу. Попробуйте ещё раз.");
+      setError("Не удалось добавить задачу. Попробуйте ещё раз.");
       return;
     }
 
@@ -62,10 +60,7 @@ const Modal = ({ onAdd, onClose }) => {
           value={value}
           ref={inputRef}
         />
-
         {error && <div className={styles.modal__error}>{error}</div>}
-        {serverError && <div className={styles.modal__error}>{serverError}</div>}
-
         <div className={styles.modal__actions}>
           <button
             className={clsx(styles.btn, styles.outline)}

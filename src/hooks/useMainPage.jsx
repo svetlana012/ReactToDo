@@ -3,7 +3,7 @@ import useTodo from "./useTodo";
 import { useTheme } from "../context/ThemeContext.jsx";
 import NoteItem from "../ui/components/NoteItem/NoteItem.jsx";
 
-const useApp = () => {
+const useMainPage = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
 
@@ -85,4 +85,4 @@ const useApp = () => {
   };
 };
 
-export default useApp;
+export default useMainPage;

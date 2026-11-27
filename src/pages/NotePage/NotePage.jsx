@@ -70,7 +70,7 @@ const NotePage = () => {
 
   useEffect(() => {
     loadNote(id);
-  }, [id, retryCount]);
+  }, [id]);
 
   if (isLoading) {
     return (
