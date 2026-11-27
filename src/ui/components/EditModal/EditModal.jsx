@@ -12,20 +12,26 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    if (event.target.value.trim()) {
-      setError("");
-    }
+    setError("");
   };
 
-  const handleApply = () => {
+  const handleApply = async () => {
     const newTitle = value.trim();
 
     if (!newTitle) {
-      setError("Note title cannot be empty");
+      setError("Заголовок не может быть пустым");
       return;
     }
 
-    onEdit(id, newTitle);
+    const success = await onEdit(id, newTitle);
+
+    if (!success) {
+      setError(
+        "Ошибка при обновлении заметки. Пожалуйста, попробуйте еще раз.",
+      );
+      return;
+    }
+    setError("");
     onClose();
   };
 
@@ -36,15 +42,15 @@ const EditModal = ({ onEdit, onClose, id, title }) => {
 
         <input
           className={clsx(modalStyles.modal__input, {
-            [modalStyles["modal__input--error"]]: error
+            [modalStyles["modal__input--error"]]: error,
           })}
           type="text"
-          placeholder="Edit your note..."
+          placeholder="Отредактируйте заметку..."
           value={value}
           onChange={handleChange}
         />
 
-        {error && <p className={modalStyles.modal__error}>{error}</p>}
+        {error && <div className={modalStyles.modal__error}>{error}</div>}
 
         <div className={modalStyles.modal__actions}>
           <button

@@ -1,24 +1,44 @@
 import { memo, useState } from "react";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
+import delay from "@/utils/delay";
 
 import styles from "./NoteItem.module.scss";
 
 const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   const handleChange = () => {
     onToggle(id);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (isDeleting) return;
     setIsDeleting(true);
-    setTimeout(() => {
-      onDelete(id);
-    }, 300);
+    setDeleteError("");
+
+    try {
+      await delay(300);
+      const response = await onDelete(id);
+
+      if (!response) {
+        setDeleteError("Не удалось удалить задачу. Попробуйте ещё раз.");
+      }
+    } catch {
+      setDeleteError("Не удалось удалить задачу. Попробуйте ещё раз.");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
-    <li className={clsx(styles.notes__item, isDeleting && styles["notes__item--deleting"])}>
+    <li
+      className={clsx(
+        styles.notes__item,
+        isDeleting && styles["notes__item--deleting"],
+      )}
+    >
       <div className={styles.note}>
         <label className={styles.note__label}>
           <input
@@ -27,9 +47,10 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
             onChange={handleChange}
             checked={isDone}
           />
-
-          <span className={styles.note__text}>{title}</span>
         </label>
+        <Link className={styles.note__text} to={`/tasks/${id}`}>
+          {title}
+        </Link>
         <div className={styles.note__actions}>
           <button
             className={styles.icon__btn}
@@ -57,6 +78,7 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
             type="button"
             aria-label="Delete"
             onClick={handleDelete}
+            disabled={isDeleting}
           >
             <svg
               width="16"
@@ -74,6 +96,7 @@ const NoteItem = ({ onToggle, onEdit, onDelete, id, isDone, title }) => {
           </button>
         </div>
       </div>
+      {deleteError && <div>{deleteError}</div>}
     </li>
   );
 };

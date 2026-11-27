@@ -7,7 +7,6 @@ import styles from "./Modal.module.scss";
 const Modal = ({ onAdd, onClose }) => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
-
   const inputRef = useRef(null);
   const modalRef = useOutsideClick(onClose);
 
@@ -18,6 +17,7 @@ const Modal = ({ onAdd, onClose }) => {
   }, []);
 
   const handleChange = (event) => {
+    setError("");
     setValue(event.target.value);
 
     if (event.target.value.trim()) {
@@ -25,7 +25,7 @@ const Modal = ({ onAdd, onClose }) => {
     }
   };
 
-  const handleApply = () => {
+  const handleApply = async () => {
     const newTitle = value.trim();
 
     if (!newTitle) {
@@ -33,7 +33,13 @@ const Modal = ({ onAdd, onClose }) => {
       return;
     }
 
-    onAdd(newTitle);
+    const success = await onAdd(newTitle);
+
+    if (!success) {
+      setError("Не удалось добавить задачу. Попробуйте ещё раз.");
+      return;
+    }
+
     setValue("");
     setError("");
     onClose();
@@ -54,9 +60,7 @@ const Modal = ({ onAdd, onClose }) => {
           value={value}
           ref={inputRef}
         />
-
-        {error && <p className={styles.modal__error}>{error}</p>}
-
+        {error && <div className={styles.modal__error}>{error}</div>}
         <div className={styles.modal__actions}>
           <button
             className={clsx(styles.btn, styles.outline)}
